@@ -1,4 +1,4 @@
-package com.example.midtermspringboot.ENTITY;
+package com.example.midtermspringboot.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
@@ -7,7 +7,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "client")

@@ -1,8 +1,8 @@
-package com.example.midtermspringboot.CONTROLLER;
+package com.example.midtermspringboot.controllers;
 
-import com.example.midtermspringboot.ENTITY.Client;
-import com.example.midtermspringboot.REPOSITORY.ClientRepository;
-import com.example.midtermspringboot.STATUS.Status;
+import com.example.midtermspringboot.entities.Client;
+import com.example.midtermspringboot.repositories.ClientRepository;
+import com.example.midtermspringboot.status.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -39,11 +39,11 @@ public class ClientController {
 
             if (client.equals(newClient)) {
                 System.out.println("Client Already exists!");
-                return Status.USER_ALREADY_EXISTS;
+                return Status.THE_USER_ALREADY_EXISTS;
             }
         }
         clientRepository.save(newClient);
-        return Status.SUCCESSFULLY_REGISTERED;
+        return Status.REGISTERED_SUCCESSFULLY;
     }
 
     @PostMapping("/clients/login")
@@ -51,19 +51,18 @@ public class ClientController {
         List<Client> clients = clientRepository.findAll();
         for (Client other : clients) {
             if (other.equals(client)) {
-                return Status.SUCCESSFULLY_LOGIN;
+                return Status.LOGIN_SUCCESSFULLY;
             }
-        }        return Status.FAILURE;
+        }        return Status.FAILED;
     }
 
     @PostMapping("/clients/logout")
-    public Status logOutClient(@Valid @RequestBody Client client) {
-        List<Client> clients = clientRepository.findAll();
+    public Status logOutClient(@Valid @RequestBody Client client) {List<Client> clients = clientRepository.findAll();
         for (Client other : clients) {
             if (other.equals(client)) {
-                return Status.SUCCESSFULLY_LOGOUT;
+                return Status.LOGOUT_SUCCESSFULLY;
             }
-        }        return Status.FAILURE;
+        }        return Status.FAILED;
     }
 
     @PutMapping("/clients/{clientid}")
@@ -84,12 +83,12 @@ public class ClientController {
             throw new IllegalStateException("client with id" + id + "does not exists");
         }
         clientRepository.deleteById(id);
-        return Status.SUCCESSFULLY_DELETED;
+        return Status.DELETED;
     }
 
     @DeleteMapping("/clients/deleteall")
     public Status deleteClients() {
         clientRepository.deleteAll();
-        return Status.SUCCESSFULLY_DELETED;
+        return Status.DELETED;
     }
 }
