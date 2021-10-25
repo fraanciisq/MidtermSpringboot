@@ -20,12 +20,12 @@ public class ItemController {
     private ClientRepository clientRepository;
 
 
-    @GetMapping("/clients/get/all/items")
+    @GetMapping("/clients/items")
     public List<Item> getItems() {
         return itemRepository.findAll();
     }
 
-    @GetMapping("/clients/items/by/id")
+    @GetMapping("/clients/id")
     public List<Item> getAllCommentsByPostId(@PathVariable(value = "id") Long id) {
         return itemRepository.findByClientId(id);
     }
@@ -56,7 +56,7 @@ public class ItemController {
     }
 
 
-    @DeleteMapping(value = "/clients/items/{item_id/client_id")
+    @DeleteMapping(value = "/clients/items/item_id/client_id")
     public Status deleteItem(@PathVariable("item_id") Long item_id) {
         boolean exists = itemRepository.existsById(item_id);
         if (!exists) {
@@ -66,7 +66,7 @@ public class ItemController {
         return Status.DELETED;
     }
 
-    @DeleteMapping("/clients/delete/all/items/")
+    @DeleteMapping("/clients/items/delete/all")
     public Status deleteItems() {
         clientRepository.deleteAll();
         return Status.DELETED;

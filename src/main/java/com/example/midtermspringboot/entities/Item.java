@@ -99,13 +99,13 @@ public class Item {
         return "Client{" +
                 "id=" + id +
                 ", name_of_item='" + name_of_item + '\'' +
-                ", category='" + type_of_item + '\'' +
+                ", type_of_item='" + type_of_item + '\'' +
                 ", price='" + price + '\'' +
                 '}';
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "clientid", nullable = false)
+    @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
 }

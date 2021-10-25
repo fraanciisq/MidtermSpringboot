@@ -65,7 +65,7 @@ public class ClientController {
         }        return Status.FAILED;
     }
 
-    @PutMapping("/clients/update/client_id")
+    @PutMapping("/clients/client_id/update")
     public Client updatePost(@PathVariable Long client_id, @Valid @RequestBody Client clientRequest) {
         return clientRepository.findById(client_id).map(client -> {
             client.setEmail(clientRequest.getEmail());
@@ -76,7 +76,7 @@ public class ClientController {
         }).orElseThrow(() -> new Exception("Client id " + client_id + " cannot be found"));
     }
 
-    @DeleteMapping("/clients/delete/client_id")
+    @DeleteMapping("/clients/client_id/delete")
     public Status deleteClient(@PathVariable("id") Long id) {
         boolean exists = clientRepository.existsById(id);
         if (!exists) {
