@@ -6,14 +6,15 @@ import com.sun.istack.NotNull;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "client")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Client {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
     private String email;
@@ -21,6 +22,10 @@ public class Client {
     private String username;
     @NotNull
     private String password;
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "client")
+    private Set<Item> items = new HashSet<>();
 
 
     public Client() {
@@ -74,10 +79,7 @@ public class Client {
         if (this == o) return true;
         if (!(o instanceof Client)) return false;
         Client client= (Client) o;
-        return
-
-                Objects.equals(username, client.username) &&
-                        Objects.equals(password, client.password);
+        return Objects.equals(username, client.username) && Objects.equals(password, client.password);
     }
 
     @Override
