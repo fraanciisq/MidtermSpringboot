@@ -20,53 +20,53 @@ public class ItemController {
     private ClientRepository clientRepository;
 
 
-    @GetMapping("/clients/items")
+    @GetMapping("/clients/all/items")
     public List<Item> getItems() {
         return itemRepository.findAll();
     }
 
-    @GetMapping("/clients/id")
+    @GetMapping("/clients/{id}/items")
     public List<Item> getAllCommentsByPostId(@PathVariable(value = "id") Long id) {
         return itemRepository.findByClientId(id);
     }
 
-    @PostMapping("/clients/items/client_id")
-    public Item createItem(@PathVariable (value = "client_id") Long client_id,
+    @PostMapping("/clients/{clientid}/items")
+    public Item createItem(@PathVariable (value = "clientid") Long clientid,
                            @Valid @RequestBody Item item) {
-        return clientRepository.findById(client_id).map(client -> {
+        return clientRepository.findById(clientid).map(client -> {
             item.setClient(client);
             return itemRepository.save(item);
-        }).orElseThrow(() -> new Exception("Client id " + client_id + " cannot be found"));
+        }).orElseThrow(() -> new Exception("Client id " + clientid + " cannot be found"));
     }
 
-    @PutMapping("/clients/items/client_id/item_id")
-    public Item updateItem(@PathVariable (value = "customer_id") Long client_id,
-                           @PathVariable (value = "item_id") Long item_id,
+    @PutMapping("/clients/{clientid}/items/{itemid}")
+    public Item updateItem(@PathVariable (value = "customerid") Long clientid,
+                           @PathVariable (value = "itemid") Long itemid,
                            @Valid @RequestBody Item itemRequest) {
-        if(!clientRepository.existsById(client_id)) {
-            throw new Exception("Item id " + client_id + " cannot be found");
+        if(!clientRepository.existsById(clientid)) {
+            throw new Exception("Item id " + clientid + " cannot be found");
         }
 
-        return itemRepository.findById(item_id).map(item -> {
+        return itemRepository.findById(itemid).map(item -> {
             item.setName_of_item(itemRequest.getName_of_item());
             item.setType_of_item(itemRequest.getType_of_item());
             item.setPrice(itemRequest.getPrice());
             return itemRepository.save(item);
-        }).orElseThrow(() -> new Exception("Client id " + item_id + "cannot be found"));
+        }).orElseThrow(() -> new Exception("Client id " + itemid + "cannot be found"));
     }
 
 
-    @DeleteMapping(value = "/clients/items/item_id/client_id")
-    public Status deleteItem(@PathVariable("item_id") Long item_id) {
-        boolean exists = itemRepository.existsById(item_id);
+    @DeleteMapping(value = "/clients/items/{clientid}/items/{itemid}")
+    public Status deleteItem(@PathVariable("itemid") Long itemid) {
+        boolean exists = itemRepository.existsById(itemid);
         if (!exists) {
-            throw new IllegalStateException("item with the given id " + item_id + " does not exists");
+            throw new IllegalStateException("item with the given id " + itemid + " does not exists");
         }
-        itemRepository.deleteById(item_id);
+        itemRepository.deleteById(itemid);
         return Status.DELETED;
     }
 
-    @DeleteMapping("/clients/items/delete/all")
+    @DeleteMapping("/clients/all/items/all")
     public Status deleteItems() {
         clientRepository.deleteAll();
         return Status.DELETED;

@@ -23,7 +23,7 @@ public class ClientController {
         return clientRepository.findAll((org.springframework.data.domain.Pageable) pageable);
     }
 
-    @GetMapping(value = "/clients/id")
+    @GetMapping(value = "/clients/{id}")
     public Optional<Client> getClient(@PathVariable("id") Long id) {
         return clientRepository.findById(id);
     }
@@ -38,7 +38,7 @@ public class ClientController {
             System.out.println("Registered client: " + newClient.toString());
 
             if (client.equals(newClient)) {
-                System.out.println("Client Already exists!");
+                System.out.println("This Specific Client Already exists!");
                 return Status.THE_USER_ALREADY_EXISTS;
             }
         }
@@ -65,18 +65,18 @@ public class ClientController {
         }        return Status.FAILED;
     }
 
-    @PutMapping("/clients/client_id/update")
-    public Client updatePost(@PathVariable Long client_id, @Valid @RequestBody Client clientRequest) {
-        return clientRepository.findById(client_id).map(client -> {
+    @PutMapping("/clients/{clientid}")
+    public Client updatePost(@PathVariable Long clientid, @Valid @RequestBody Client clientRequest) {
+        return clientRepository.findById(clientid).map(client -> {
             client.setEmail(clientRequest.getEmail());
             client.setEmail(clientRequest.getEmail());
             client.setUsername(clientRequest.getUsername());
             client.setPassword(clientRequest.getPassword());
             return clientRepository.save(client);
-        }).orElseThrow(() -> new Exception("Client id " + client_id + " cannot be found"));
+        }).orElseThrow(() -> new Exception("Client id " + clientid + " cannot be found"));
     }
 
-    @DeleteMapping("/clients/client_id/delete")
+    @DeleteMapping("/clients/{clientid}")
     public Status deleteClient(@PathVariable("id") Long id) {
         boolean exists = clientRepository.existsById(id);
         if (!exists) {
@@ -86,7 +86,7 @@ public class ClientController {
         return Status.DELETED;
     }
 
-    @DeleteMapping("/clients/delete/all")
+    @DeleteMapping("/clients/deleteall")
     public Status deleteClients() {
         clientRepository.deleteAll();
         return Status.DELETED;
