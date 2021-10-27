@@ -16,22 +16,21 @@ public class ClientController {
     @Autowired
     private ClientRepository clientRepository;
 
-    @GetMapping (path = "/clients/all")
-    public List<Client> getClients() {
-        return clientRepository.findAll();
-    }
-
     @GetMapping(value = "/clients/{id}")
     public Optional<Client> getClient(@PathVariable("id") Long id) {
         return clientRepository.findById(id);
     }
 
+    @GetMapping (path = "/clients/all")
+    public List<Client> getClients() {
+        return clientRepository.findAll();
+    }
+
+
     @PostMapping("/clients/register")
     public Status registerClient(@Valid @RequestBody Client newClient) {
         List<Client> clients = clientRepository.findAll();
-
         System.out.println("New client: " + newClient.toString());
-
         for (Client client : clients) {
             System.out.println("Registered client: " + newClient.toString());
 
