@@ -4,11 +4,9 @@ import com.example.midtermspringboot.entities.Client;
 import com.example.midtermspringboot.repositories.ClientRepository;
 import com.example.midtermspringboot.status.Status;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,9 +16,9 @@ public class ClientController {
     @Autowired
     private ClientRepository clientRepository;
 
-    @GetMapping("/clients")
-    public Page<Client> getAllClients(Pageable pageable) {
-        return clientRepository.findAll((org.springframework.data.domain.Pageable) pageable);
+    @GetMapping("/clients/all")
+    public List<Client> getClients() {
+        return clientRepository.findAll();
     }
 
     @GetMapping(value = "/clients/{id}")
@@ -39,11 +37,11 @@ public class ClientController {
 
             if (client.equals(newClient)) {
                 System.out.println("This Specific Client Already exists!");
-                return Status.THE_USER_ALREADY_EXISTS;
+                return Status.THE_CLIENT_ALREADY_EXISTS;
             }
         }
         clientRepository.save(newClient);
-        return Status.REGISTERED_SUCCESSFULLY;
+        return Status.THE_CLIENT_LOGIN_SUCCESSFULLY;
     }
 
     @PostMapping("/clients/login")
@@ -51,7 +49,7 @@ public class ClientController {
         List<Client> clients = clientRepository.findAll();
         for (Client other : clients) {
             if (other.equals(client)) {
-                return Status.LOGIN_SUCCESSFULLY;
+                return Status.THE_CLIENT_LOGIN_SUCCESSFULLY;
             }
         }        return Status.FAILED;
     }
@@ -60,7 +58,7 @@ public class ClientController {
     public Status logOutClient(@Valid @RequestBody Client client) {List<Client> clients = clientRepository.findAll();
         for (Client other : clients) {
             if (other.equals(client)) {
-                return Status.LOGOUT_SUCCESSFULLY;
+                return Status.THE_CLIENT_LOGOUT_SUCCESSFULLY;
             }
         }        return Status.FAILED;
     }
