@@ -41,7 +41,7 @@ public class ClientController {
             }
         }
         clientRepository.save(newClient);
-        return Status.THE_CLIENT_LOGIN_SUCCESSFULLY;
+        return Status.A_NEW_CLIENT_REGISTERED_SUCCESSFULLY;
     }
 
     @PostMapping("/clients/login")
@@ -74,13 +74,13 @@ public class ClientController {
         }).orElseThrow(() -> new Exception("Client id " + clientid + " cannot be found"));
     }
 
-    @DeleteMapping("/clients/{clientid}")
-    public Status deleteClient(@PathVariable("id") Long id) {
-        boolean exists = clientRepository.existsById(id);
+    @DeleteMapping(value = "/clients/{clientid}")
+    public Status deleteClient(@PathVariable("clientid") Long clientid) {
+        boolean exists = clientRepository.existsById(clientid);
         if (!exists) {
-            throw new IllegalStateException("The client with the given id" + id + "does not exists");
+            throw new IllegalStateException("client with the given id " + clientid + " does not exists");
         }
-        clientRepository.deleteById(id);
+        clientRepository.deleteById(clientid);
         return Status.DELETED;
     }
 
