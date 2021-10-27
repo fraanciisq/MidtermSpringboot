@@ -40,7 +40,7 @@ public class ItemController {
     }
 
     @PutMapping("/clients/{clientid}/items/{itemid}")
-    public Item updateItem(@PathVariable (value = "customerid") Long clientid,
+    public Item updateItem(@PathVariable (value = "clientid") Long clientid,
                            @PathVariable (value = "itemid") Long itemid,
                            @Valid @RequestBody Item itemRequest) {
         if(!clientRepository.existsById(clientid)) {
