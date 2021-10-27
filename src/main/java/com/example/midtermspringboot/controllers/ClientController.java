@@ -4,9 +4,11 @@ import com.example.midtermspringboot.entities.Client;
 import com.example.midtermspringboot.repositories.ClientRepository;
 import com.example.midtermspringboot.status.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,31 +18,32 @@ public class ClientController {
     @Autowired
     private ClientRepository clientRepository;
 
+    @GetMapping("/clients")
+    public Page<Client> getAllClients(Pageable pageable) {
+        return clientRepository.findAll((org.springframework.data.domain.Pageable) pageable);
+    }
+
     @GetMapping(value = "/clients/{id}")
     public Optional<Client> getClient(@PathVariable("id") Long id) {
         return clientRepository.findById(id);
     }
 
-    @GetMapping (path = "/clients/all")
-    public List<Client> getClients() {
-        return clientRepository.findAll();
-    }
-
-
     @PostMapping("/clients/register")
     public Status registerClient(@Valid @RequestBody Client newClient) {
         List<Client> clients = clientRepository.findAll();
+
         System.out.println("New client: " + newClient.toString());
+
         for (Client client : clients) {
             System.out.println("Registered client: " + newClient.toString());
 
             if (client.equals(newClient)) {
                 System.out.println("This Specific Client Already exists!");
-                return Status.THE_CLIENT_ALREADY_EXISTS;
+                return Status.THE_USER_ALREADY_EXISTS;
             }
         }
         clientRepository.save(newClient);
-        return Status.A_NEW_CLIENT_REGISTERED_SUCCESSFULLY;
+        return Status.REGISTERED_SUCCESSFULLY;
     }
 
     @PostMapping("/clients/login")
@@ -48,7 +51,7 @@ public class ClientController {
         List<Client> clients = clientRepository.findAll();
         for (Client other : clients) {
             if (other.equals(client)) {
-                return Status.THE_CLIENT_LOGIN_SUCCESSFULLY;
+                return Status.LOGIN_SUCCESSFULLY;
             }
         }        return Status.FAILED;
     }
@@ -57,7 +60,7 @@ public class ClientController {
     public Status logOutClient(@Valid @RequestBody Client client) {List<Client> clients = clientRepository.findAll();
         for (Client other : clients) {
             if (other.equals(client)) {
-                return Status.THE_CLIENT_LOGOUT_SUCCESSFULLY;
+                return Status.LOGOUT_SUCCESSFULLY;
             }
         }        return Status.FAILED;
     }
@@ -73,13 +76,13 @@ public class ClientController {
         }).orElseThrow(() -> new Exception("Client id " + clientid + " cannot be found"));
     }
 
-    @DeleteMapping(value = "/clients/{clientid}")
-    public Status deleteClient(@PathVariable("clientid") Long clientid) {
-        boolean exists = clientRepository.existsById(clientid);
+    @DeleteMapping("/clients/{clientid}")
+    public Status deleteClient(@PathVariable("id") Long id) {
+        boolean exists = clientRepository.existsById(id);
         if (!exists) {
-            throw new IllegalStateException("item with the given id " + clientid + " does not exists");
+            throw new IllegalStateException("The client with the given id" + id + "does not exists");
         }
-        clientRepository.deleteById(clientid);
+        clientRepository.deleteById(id);
         return Status.DELETED;
     }
 
